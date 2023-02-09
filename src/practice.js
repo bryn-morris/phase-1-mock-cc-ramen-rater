@@ -48,24 +48,59 @@
 /////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////
 
-ramenMenuDiv = document.querySelector('div#ramen-men');
-
-console.log(ramenMenuDiv)
-
-
-
-
+const ramenMenuDiv = document.querySelector('div#ramen-menu');
+const ramenDetailImg = document.querySelector('img.detail-image')
+const ramenDetailName= document.querySelector('h2.name')
+const ramenDetailRestaurant = document.querySelector('h3.restaurant')
+const ramenDetailRating = document.querySelector('span#rating-display')
+const ramenDetailComment = document.querySelector('p#comment-display')
+const ramenForm = document.querySelector('form#new-ramen')
 
 ///////////////////////////////////////////////////////////////////////////////
-////////////////////   Core Deliverable #1 - 
+////////////////////   Core Deliverable #2 - 
 ///////////////////////////////////////////////////////////////////////////////
 
-// Grab the Div with the ID of Ramen Menu
-// Use a fetch request to grab data from db.json
-// .then (r => r.json())
-// .then (data => { console.log data to see data type and change variable name})
-// If needed dig into the data structure to convert it to an array to call foreach
-// Pass a function that acts on each element within array
-    // Create img tag using createElement
-    // assign src of img tag 
-    // Append img to Div with ID of ramen menu
+function renderMenu (ramenObj) {
+    const newImg = document.createElement ('img');
+    newImg.src = ramenObj.image;
+    ramenMenuDiv.append(newImg);
+
+    newImg.addEventListener('click',()=>{
+    ramenDetailImg.src = ramenObj.image;
+    ramenDetailName.innerText = ramenObj.name;
+    ramenDetailRestaurant.innerText = ramenObj.restaurant;
+    ramenDetailRating.innerText = ramenObj.rating;
+    ramenDetailComment.innerText = ramenObj.comment;
+    })
+}
+
+fetch ('http://localhost:3000/ramens')
+    .then ( r=> r.json ())
+    .then ( arrayOfObjects => {arrayOfObjects.forEach(renderMenu);})   
+    
+///////////////////////////////////////////////////////////////////////////////
+////////////////////   Core Deliverable #3 - 
+///////////////////////////////////////////////////////////////////////////////
+
+
+ramenForm.addEventListener('submit', (eventObj) => {
+
+    eventObj.preventDefault();
+
+    //should be able to move the render Menu function out of scope and use it here
+    //refactor once code  is working and I have saved a submission copy
+
+    formImg = document.createElement ('img');
+    formImg.src = eventObj.target.image.value;
+    ramenMenuDiv.append(formImg);
+
+    formImg.addEventListener('click',()=>{
+
+        ramenDetailImg.src = eventObj.target.image.value;
+        ramenDetailName.innerText = eventObj.target.name.value;
+        ramenDetailRestaurant.innerText = eventObj.target.restaurant.value;
+        ramenDetailRating.innerText = eventObj.target.rating.value;
+        ramenDetailComment.innerText = eventObj.target['new-comment'].value;
+    })
+
+})
